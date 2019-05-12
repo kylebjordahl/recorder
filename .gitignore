@@ -1,0 +1,9 @@
+node_modules/
+*.swp
+*.swo
+typings/
+dist/
+.DS_Store
+bin/
+recorder-linux-*/
+*.log

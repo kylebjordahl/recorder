@@ -1,0 +1,86 @@
+{
+	"name": "recorder",
+	"version": "0.0.1",
+	"author": "",
+	"description": "a simple audio recording app",
+	"main": "dist/index.js",
+	"types": "dist/index.d.js",
+	"scripts": {
+		"build": "tsc -p .",
+		"test": "jest",
+		"test-ci": "jest --coverage",
+		"cleanup": "rm -fr dist/",
+		"prepublishOnly": "npm run build",
+		"postpack": "npm run cleanup",
+		"watch": "tsc -w",
+		"lint": "tslint -c tslint.json -p tsconfig.json",
+		"start": "npm run build && npm run start-electron",
+		"start-electron": "electron ./dist/index.js",
+		"dist": "electron-builder",
+		"dist-rpi": "electron-builder --armv7l",
+		"postinstall": "electron-builder install-app-deps",
+		"package": "electron-packager . recorder --platform=linux --arch=armv7l"
+	},
+	"files": [
+		"dist"
+	],
+	"dependencies": {
+		"@types/luxon": "^1.11.1",
+		"ffmpeg": "^0.0.4",
+		"luxon": "^1.12.0",
+		"node-audiorecorder": "^1.4.0",
+		"winston": "^3.2.1"
+	},
+	"devDependencies": {
+		"electron": "^3.0.13",
+		"@types/jest": "23.3.10",
+		"@types/node": "^11.11.0",
+		"dotenv": "6.2.0",
+		"electron-builder": "^20.38.5",
+		"electron-packager": "^13.1.1",
+		"jest": "23.6.0",
+		"nodemon": "1.18.9",
+		"ts-jest": "23.10.5",
+		"ts-node": "8.0.2",
+		"tslint": "5.12.0",
+		"typescript": "3.3.3"
+	},
+	"resolutions": {
+		"**/event-stream": "^4.0.1"
+	},
+	"repository": {
+		"type": "git",
+		"url": ""
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"jok"
+	],
+	"license": "MIT",
+	"jest": {
+		"transform": {
+			"^.+\\.tsx?$": "ts-jest"
+		},
+		"testURL": "http://localhost",
+		"testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+		"moduleFileExtensions": [
+			"ts",
+			"tsx",
+			"js",
+			"jsx",
+			"json",
+			"node"
+		]
+	},
+	"build": {
+		"appId": "com.kylebjordahl.recorder",
+		"mac": {
+			"category": "your.app.category.type"
+		},
+		"directories": {
+			"output": "./bin"
+		}
+	}
+}

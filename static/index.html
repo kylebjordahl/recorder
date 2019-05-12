@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Hello World!</title>
+	<link rel=stylesheet href="style.css">
+</head>
+
+<body>
+
+	<a class="btn" onclick="triggerStart()" id="start-btn" hidden>Start</a>
+	<a class="btn" onclick="triggerStop()" id="stop-btn">Stop</a>
+
+</body>
+
+<script>
+	const green = `#3D9970`
+	const red = `#85144b`
+	let recordingState = false
+	const { ipcRenderer } = require('electron')
+
+	const startBtn = document.getElementById('start-btn')
+	const stopBtn = document.getElementById('stop-btn')
+
+	function triggerStart() {
+		ipcRenderer.send('start-recording')
+	}
+	function triggerStop() {
+		ipcRenderer.send('stop-recording')
+	}
+
+
+	const updateRecordState = (_, arg) => {
+		recordingState = arg
+
+		//set background
+		document.body.style.background = recordingState ? green : red
+		// set buttons
+		startBtn.style.display = recordingState ? 'none' : 'inline-block'
+		stopBtn.style.display = !recordingState ? 'none' : 'inline-block'
+	}
+
+	ipcRenderer.addListener('record-status', updateRecordState)
+	ipcRenderer.send('query-recording')
+</script>
+
+<!-- <script>
+	const { desktopCapturer } = require('electron')
+	desktopCapturer.getSources({ types: ['window', 'screen'] }, (error, sources) => {
+		if (error) throw error
+		for (let i = 0; i < sources.length; ++i) {
+			if (sources[i].name === 'Your Window Name here!') {
+				navigator.webkitGetUserMedia({
+					audio: false,
+					video: {
+						mandatory: {
+							chromeMediaSource: 'desktop',
+							chromeMediaSourceId: sources[i].id,
+							minWidth: 1280,
+							maxWidth: 1280,
+							minHeight: 720,
+							maxHeight: 720
+						}
+					}
+				}, handleStream, handleError)
+				return
+			}
+		}
+	})
+
+	function handleStream(stream) {
+		document.querySelector('video').src = URL.createObjectURL(stream)
+	}
+
+	function handleError(e) {
+		console.log(e)
+	}
+</script> -->
+
+</html>
